@@ -117,6 +117,8 @@ class App extends Component {
 
                 return getButton(type, label, key);
             });
+        } else {
+            return <p>Is not array of buttons</p>;
         }
         
         return (
