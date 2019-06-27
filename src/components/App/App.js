@@ -67,9 +67,9 @@ class App extends Component {
         const config = JSON.parse(this.state.config);
         let items, buttons;
 
-        if (Array.isArray(config.items)) {  // Could be lodash
+        if (Array.isArray(config.items)) {
             items = config.items.map((item, key) => {
-                const type = item.type;
+                const { type } = item;
 
                 if (type === 'number') {
                     return (
@@ -154,7 +154,7 @@ class App extends Component {
         let formattedJSON;
 
         if (isValid) {
-            formattedJSON = JSON.stringify(JSON.parse(config), undefined, 2);  // Could be some module
+            formattedJSON = JSON.stringify(JSON.parse(config), undefined, 2);
         }
 
         return (
