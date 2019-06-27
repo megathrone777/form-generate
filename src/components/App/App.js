@@ -22,7 +22,10 @@ const ItemWrap = ({ label, type, text }) => {
     return (
         <InputWrap>
             <Label htmlFor={label}>{label}</Label>
-            <Input id={label} type={type} text={text ? text : ''} />
+            { type === 'textarea' && 
+                <Text id={label} /> ||
+                <Input id={label} type={type} text={text ? text : ''} />
+            }
         </InputWrap>
     )    
 };
@@ -74,8 +77,6 @@ class App extends Component {
 
     generateForm() {
         const config = JSON.parse(this.state.config);
-
-
 
         const getInput = (type, label, key) => {
             const inputs = {
