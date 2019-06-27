@@ -115,7 +115,7 @@ class App extends Component {
             buttons = config.buttons.map((button, key) => {  // Return form buttons
                 const { type, label } = button;
 
-                return getButton(type, label);
+                return getButton(type, label, key);
             });
         }
         
