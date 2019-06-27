@@ -18,6 +18,15 @@ const GlobalStyle = createGlobalStyle`
     body { margin: 0; }
 `;
 
+const ItemWrap = ({ label, type, text }) => {
+    return (
+        <InputWrap>
+            <Label htmlFor={label}>{label}</Label>
+            <Input id={label} type={type} text={text ? text : ''} />
+        </InputWrap>
+    )    
+};
+
 class App extends Component {
     constructor() {
         super();
@@ -28,7 +37,7 @@ class App extends Component {
             config: `{
                 "formHeading": "Form heading",
                 "items": [
-                    { "type": "text", "label": "Text input" }
+                    { "type": "number", "label": "Number input" }
                 ],
                 "buttons": [
                     { "type": "reset", "label": "Cancel" },
@@ -65,58 +74,31 @@ class App extends Component {
 
     generateForm() {
         const config = JSON.parse(this.state.config);
+        const getInput = (type, label, key) => {
+            const inputs = {
+                'number': <ItemWrap key={key} label={label ? label : 'Number'} type="number" text />,
+                'text': <ItemWrap key={key} label={label ? label : 'Text input'} type="text" text />,
+                'checkbox': <ItemWrap key={key} label={label ? label : 'Checkbox'} type="checkbox" />,
+                'date': <ItemWrap key={key} label={label ? label : 'Date'} type="date" text />,
+                'radio': <ItemWrap key={key} label={label ? label : 'Radio'} type="radio" />,
+                'textarea': (
+                    <InputWrap key={key}>
+                        <Label htmlFor={label}>{label ? label : 'Textarea'}</Label>
+                        <Text id={label} />
+                    </InputWrap>
+                ),
+                'default': <p key={key}>Unknown input type</p>
+            }
+
+            return inputs[type] || inputs['default'];
+        }
         let items, buttons;
 
         if (Array.isArray(config.items)) {
             items = config.items.map((item, key) => {
-                const { type } = item;
+                const { type, label } = item;
 
-                if (type === 'number') {
-                    return (
-                        <InputWrap key={key}>
-                            <Label htmlFor={item.label}>{item.label ? item.label : 'Number'}</Label>
-                            <Input id={item.label} type="number" text />
-                        </InputWrap>
-                    );
-                } else if (type === 'text') {
-                    return (
-                        <InputWrap key={key}>
-                            <Label htmlFor={item.label}>{item.label ? item.label : 'Text input'}</Label>
-                            <Input id={item.label} type="text" text />
-                        </InputWrap>
-                    );
-                } else if (type === 'textarea') {
-                    return (
-                        <InputWrap key={key}>
-                            <Label htmlFor={item.label}>{item.label ? item.label : 'Textarea'}</Label>
-                            <Text id={item.label} />
-                        </InputWrap>
-                    );
-                } else if (type === 'checkbox') {
-                    return (
-                        <InputWrap key={key}>
-                            <Label htmlFor={item.label}>{item.label ? item.label : 'Checkbox'}</Label>
-                            <Input id={item.label} type="checkbox" />
-                        </InputWrap>
-                    );
-                } else if (type === 'date') {
-                    return (
-                        <InputWrap key={key}>
-                            <Label htmlFor={item.label}>{item.label ? item.label : 'Date'}</Label>
-                            <Input id={item.label} type="date" text />
-                        </InputWrap>
-                    );
-                } else if (type === 'radio') {
-                    return (
-                        <InputWrap key={key}>
-                            <Label htmlFor={item.label}>{item.label ? item.label : 'Radio'}</Label>
-                            <Input id={item.label} type="radio" />
-                        </InputWrap>
-                    );
-                }
-                else {
-                    return <p key={key}>Unknown input type</p>;
-                }
+                return getInput(type, label, key);
             });
         } else {
             return <p>Is not array of items</p>;
