@@ -74,24 +74,24 @@ class App extends Component {
 
     generateForm() {
         const config = JSON.parse(this.state.config);
+
         const getInput = (type, label, key) => {
             const inputs = {
-                'number': <ItemWrap key={key} label={label ? label : 'Number'} type="number" text />,
-                'text': <ItemWrap key={key} label={label ? label : 'Text input'} type="text" text />,
-                'checkbox': <ItemWrap key={key} label={label ? label : 'Checkbox'} type="checkbox" />,
-                'date': <ItemWrap key={key} label={label ? label : 'Date'} type="date" text />,
-                'radio': <ItemWrap key={key} label={label ? label : 'Radio'} type="radio" />,
-                'textarea': (
-                    <InputWrap key={key}>
-                        <Label htmlFor={label}>{label ? label : 'Textarea'}</Label>
-                        <Text id={label} />
-                    </InputWrap>
-                ),
+                'number': { input: 'number', label: label ? label : 'Number', isTextfield: true },
+                'text': { input: 'text', label: label ? label : 'Text input', isTextfield: true },
                 'default': <p key={key}>Unknown input type</p>
             }
 
-            return inputs[type] || inputs['default'];
+            return inputs[type] 
+                ? <ItemWrap 
+                    key={key} 
+                    label={inputs[type] && inputs[type].label} 
+                    type={inputs[type] && inputs[type].input} 
+                    text={inputs[type] && inputs[type].isTextfield ? 'text' : ''} 
+                    /> 
+                : inputs['default'];
         }
+
         let items, buttons;
 
         if (Array.isArray(config.items)) {
