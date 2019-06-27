@@ -90,7 +90,7 @@ class App extends Component {
                 'reset': { button: 'reset', label: label ? label : 'Reset' },
                 'submit': { button: 'submit', label: label ? label : 'Submit' },
                 'default': <Button type="button" key={key}>Simple button</Button>
-            }
+            };
 
             return buttons[type]
                 ? <Button 
