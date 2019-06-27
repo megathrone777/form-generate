@@ -75,19 +75,25 @@ class App extends Component {
     generateForm() {
         const config = JSON.parse(this.state.config);
 
+
+
         const getInput = (type, label, key) => {
             const inputs = {
                 'number': { input: 'number', label: label ? label : 'Number', isTextfield: true },
                 'text': { input: 'text', label: label ? label : 'Text input', isTextfield: true },
+                'date': { input: 'date', label: label ? label : 'Date input', isTextfield: true },
+                'checkbox': { input: 'checkbox', label: label ? label : 'Checkbox input', isTextfield: false },
+                'radio': { nput: 'radio', label: label ? label : 'Radio input', isTextfield: false },
+                'textarea': { input: 'textarea', label: label ? label : 'Textarea', isTextfield: true },
                 'default': <p key={key}>Unknown input type</p>
-            }
+            };
 
             return inputs[type] 
                 ? <ItemWrap 
                     key={key} 
-                    label={inputs[type] && inputs[type].label} 
-                    type={inputs[type] && inputs[type].input} 
-                    text={inputs[type] && inputs[type].isTextfield ? 'text' : ''} 
+                    label={inputs[type].label} 
+                    type={inputs[type].input} 
+                    text={inputs[type].isTextfield ? 'text' : ''} 
                     /> 
                 : inputs['default'];
         }
