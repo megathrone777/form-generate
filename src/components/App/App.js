@@ -6,29 +6,14 @@ import {
     TabsContent,
     Textarea,
     ButtonsWrap,
-    Button,
-    InputWrap,
-    Input,
-    Text,
-    Label
+    Button
 } from "./styled";
+import ItemWrap from '../ItemWrap';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
     body { margin: 0; }
 `;
-
-const ItemWrap = ({ label, type, text }) => {
-    return (
-        <InputWrap>
-            <Label htmlFor={label}>{label}</Label>
-            { type === 'textarea' && 
-                <Text id={label} /> ||
-                <Input id={label} type={type} text={text ? text : ''} />
-            }
-        </InputWrap>
-    )    
-};
 
 class App extends Component {
     constructor() {
@@ -77,6 +62,7 @@ class App extends Component {
 
     generateForm() {
         const config = JSON.parse(this.state.config);
+        let items, buttons;
 
         const getInput = (type, label, key) => {
             const inputs = {
@@ -97,31 +83,39 @@ class App extends Component {
                     text={inputs[type].isTextfield ? 'text' : ''} 
                     /> 
                 : inputs['default'];
+        };
+
+        const getButton = (type, label, key) => {
+            const buttons = {
+                'reset': { button: 'reset', label: label ? label : 'Reset' },
+                'submit': { button: 'submit', label: label ? label : 'Submit' },
+                'default': <Button type="button" key={key}>Simple button</Button>
+            }
+
+            return buttons[type]
+                ? <Button 
+                    key={key}
+                    type={buttons[type].button}>                    
+                        {buttons[type].label}
+                    </Button>
+                : buttons['default'];
         }
 
-        let items, buttons;
-
         if (Array.isArray(config.items)) {
-            items = config.items.map((item, key) => {
+            items = config.items.map((item, key) => { // Return form inputs
                 const { type, label } = item;
 
                 return getInput(type, label, key);
             });
         } else {
-            return <p>Is not array of items</p>;
+            return <p>Is not array of buttons</p>;
         }
 
         if (Array.isArray(config.buttons)) {
-            buttons = config.buttons.map((button, key) => {
-                const type = button.type;
+            buttons = config.buttons.map((button, key) => {  // Return form buttons
+                const { type, label } = button;
 
-                if (type === 'reset') {
-                    return <Button type="reset" key={key}>{ button.label }</Button>
-                } else if (type === 'submit') {
-                    return <Button type="submit" key = { key }>{ button.label }</Button>
-                } else {
-                    return <p key={key}>Unknown button type</p>
-                }
+                return getButton(type, label);
             });
         }
         
